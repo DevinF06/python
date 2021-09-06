@@ -2,12 +2,14 @@ def div(n, d, showRepeat=True, digits=50):
     from math import floor
     if n % d == 0: return str(n/d)
     
-    m = 2
-    while ( n*m != floor(n*m) or
-            d*m != floor(d*m) ):
-        m += 1
-    n *= m
-    d *= m
+    s = "-" if (n < 0) ^ (d < 0) else ""
+    n = abs(n)
+    d = abs(d)
+    
+    if n != floor(n) or d != floor(d):
+        g = gcd(n, d)
+        n /= g
+        d /= g
     
     r = n % d
     o = ""
@@ -35,7 +37,12 @@ def div(n, d, showRepeat=True, digits=50):
                     o += "..."
                 break
     
-    return str(floor(n/d))+"."+o
+    return s+str(floor(n/d))+"."+o
+
+def gcd(a, b):
+    while b:
+        a, b = b, a%b
+    return abs(a)
 
 def num(num):
     from math import isfinite, isnan, floor
