@@ -1,5 +1,4 @@
 def div(n, d, showRepeat=True, digits=50):
-    from functools import reduce
     from math import floor
     if n % d == 0: return str(n/d)
     
@@ -11,31 +10,32 @@ def div(n, d, showRepeat=True, digits=50):
     d *= m
     
     r = n % d
-    v = [ [str(floor(n/d))+"."] ]
+    o = ""
+    v = []
     
     it = 0
     while r > 0:
         r *= 10
         
-        b = False
-        for i in range(1, len(v)):
-            if v[i][1] == r:
-                b = True
-                if showRepeat: v[i-1][0] += "r"
-                break
-        if b: break
+        if r in v:
+            if showRepeat:
+                i = v.index(r)+1
+                o = o[:i] + "r" + o[i:]
+            break
         
         m = floor(r / d)
-        v.append( [str(m), r] )
+        o += str(m)
+        v.append(r)
         r -= d * m
         
         if digits > 0:
             it += 1
             if it == digits:
-                if showRepeat: v[-1][0] += "..."
+                if showRepeat:
+                    o += "..."
                 break
     
-    return reduce(lambda a, c: a+c[0], v, "")
+    return str(floor(n/d))+"."+o
 
 def num(num):
     from math import isfinite, isnan, floor
